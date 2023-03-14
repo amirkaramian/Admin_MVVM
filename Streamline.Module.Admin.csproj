@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <BaseOutputPath>bin\</BaseOutputPath>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Company>$(Admin)</Company>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;CODE_ANALYSIS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;CODE_ANALYSIS</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Images\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <None Remove="Images\**" />
+    <Page Remove="Images\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="SmartInspectFor3DInfotech" Version="1.0.40.9" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Private.ServiceModel" Version="4.10.0" />
+    <PackageReference Include="System.Web.Services.Description" Version="4.10.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TDI.LIcense\TDI.Licensing.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    
+    <Reference Include="CommonStringsAdminAdmin">
+      <HintPath>..\binaries\CommonStringsAdmin.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="Notifications.Wpf.Core">
+      <HintPath>..\binaries\Notifications.Wpf.Core.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="PLUSManaged">
+      <HintPath>..\binaries\PLUSManaged.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="Streamline.Common">
+      <HintPath>..\binaries\Streamline.Common.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="Streamline.Controls">
+      <HintPath>..\binaries\Streamline.Controls.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\binaries\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

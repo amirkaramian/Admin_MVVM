@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="Views\License\ActiveManualView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\License\ActiveOnlineView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\LicenseView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\License\ProxyCredentialsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\License\TelephonicActivationView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\License\ActiveManualView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\License\ActiveOnlineView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\LicenseView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\License\ProxyCredentialsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\License\TelephonicActivationView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\UserMapView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

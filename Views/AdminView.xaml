@@ -1,0 +1,200 @@
+﻿<UserControl x:Class="Streamline.Module.Admin.Views.AdminView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:viewModel="clr-namespace:Streamline.Module.Admin.ViewModel"
+             xmlns:lcviewModel="clr-namespace:Streamline.Module.Admin.ViewModel.License"
+             xmlns:converters="clr-namespace:Streamline.Module.Admin.Converter"
+             xmlns:strings="clr-namespace:CommonStringsAdmin;assembly=CommonStringsAdmin"
+             xmlns:local="clr-namespace:Streamline.Module.Admin"
+             xmlns:streamlinectrls="clr-namespace:Streamline.Controls;assembly=Streamline.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+             xmlns:views="clr-namespace:Streamline.Module.Admin.Views"
+             xmlns:lcviews="clr-namespace:Streamline.Module.Admin.Views.License"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TreeViewItem" BasedOn="{StaticResource MahApps.Styles.TreeViewItem}">
+            <Style.Setters>
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="IsExpanded" Value="True" />
+            </Style.Setters>
+        </Style>
+
+        <DataTemplate x:Key="hamburgerHeaderTemplate">
+            <DockPanel LastChildFill="True" Height="35"
+                                           DataContext="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},Path=DataContext}">
+                <ContentControl HorizontalContentAlignment="Stretch" 
+                                                        HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                                        Content="{Binding Tag.Icon}"/>
+                <TextBlock x:Name="TextPart" VerticalAlignment="Center" FontSize="16" Margin="8,0,0,0" Text="{Binding Label}" />
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="hamburgerHeaderUserTemplate">
+            <streamlinectrls:SelectableControl  x:Name="expandedView" >
+                <DockPanel LastChildFill="True" Height="35" 
+                                           DataContext="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},Path=DataContext}">
+                    <ContentControl HorizontalContentAlignment="Stretch" 
+                                                        HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                                        Content="{Binding Tag.Icon}"/>
+                    <TextBlock x:Name="TextPart" VerticalAlignment="Center" FontSize="16" Margin="8,0,0,0" Text="{Binding Label}" />
+                    <Button Width="20" Height="21" HorizontalAlignment="Right" Margin="4" Cursor="Hand" BorderBrush="Transparent"  Style="{StaticResource MahApps.Styles.Button.Circle}"  DataContext="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},Path=DataContext}" Command="{Binding Tag.AddNewUserCommnad}">
+                        <iconPacks:PackIconFontAwesome x:Name="addIcon"  DockPanel.Dock="Right" Kind="PlusCircleSolid"  VerticalAlignment="Center" />
+                    </Button>
+                </DockPanel>
+            </streamlinectrls:SelectableControl>
+        </DataTemplate>
+        <DataTemplate x:Key="hamburgerHeaderLicenseTemplate">
+            <streamlinectrls:SelectableControl  x:Name="expandedView" Cursor="Hand"  DataContext="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},Path=DataContext}" Command="{Binding Tag.SelectCommand}" >
+
+                <DockPanel LastChildFill="True" Height="35" 
+                                           DataContext="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},Path=DataContext}">
+                    <ContentControl HorizontalContentAlignment="Stretch" 
+                                                        HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                                        Content="{Binding Tag.Icon}"/>
+                    <TextBlock x:Name="TextPart" VerticalAlignment="Center" FontSize="16" Margin="8,0,0,0" Text="{Binding Label}" />
+                </DockPanel>
+            </streamlinectrls:SelectableControl>
+        </DataTemplate>
+        <converters:BooleanToVisibilityConverter x:Key="boolVisibiltiyConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="boolVisibiltiyInvertedConverter" IsInverted="True"/>
+    </UserControl.Resources>
+    <Grid>
+        <Controls:HamburgerMenu x:Name="hamburger" DisplayMode="CompactInline" CanResizeOpenPane="True" Style="{DynamicResource MahApps.Styles.HamburgerMenu.CreatorsUpdate}">
+            <Controls:HamburgerMenu.Resources>
+                <DataTemplate x:Key="userMapTemplate">
+                    <Grid DataContext="{Binding}">
+                        <TreeViewItem x:Name="expandedView"  IsExpanded="True"  ItemsSource="{Binding Tag.Items}"  HeaderTemplate="{StaticResource hamburgerHeaderUserTemplate}">
+                            <TreeViewItem.ItemTemplate>
+                                <DataTemplate>
+                                    <streamlinectrls:SelectableControl Cursor="Hand" x:Name="expandedView" Command="{Binding SelectCommand}">
+                                        <DockPanel LastChildFill="True" DataContext="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},Path=DataContext}"
+                                                   ToolTip="{Binding Name}">
+                                            <iconPacks:PackIconFontAwesome x:Name="checkIcon" DockPanel.Dock="Right" Kind="CheckCircleRegular" Margin="4,0"
+                                                                           Visibility="{Binding IsSelected,Converter={StaticResource boolVisibiltiyConverter}}"/>
+                                            <RadioButton IsChecked="{Binding IsSelected}" GroupName="configGroup" Visibility="Collapsed" />
+                                            <TextBlock x:Name="TextPart" VerticalAlignment="Center" Margin="8,0,0,0" Text="{Binding CommonName}" TextWrapping="NoWrap"/>
+                                        </DockPanel>
+                                    </streamlinectrls:SelectableControl>
+                                </DataTemplate>
+                            </TreeViewItem.ItemTemplate>
+                        </TreeViewItem>
+                        <ContentControl x:Name="collapseView" Height="44" Margin="1,8"
+                                        Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Controls:HamburgerMenu}}, Path=CompactPaneLength}"
+                                        HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                                        HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                        Content="{Binding Tag.IconSmall}"/>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Controls:HamburgerMenu}, Path=IsPaneOpen}" Value="true">
+                            <Setter TargetName="collapseView" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="expandedView" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Controls:HamburgerMenu}, Path=IsPaneOpen}" Value="false">
+                            <Setter TargetName="collapseView" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="expandedView" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+                <DataTemplate x:Key="licenseTemplate">
+                    <Grid DataContext="{Binding}">
+                        <TreeViewItem x:Name="expandedView"  IsExpanded="True"  ItemsSource="{Binding Tag.Items}"  HeaderTemplate="{StaticResource hamburgerHeaderLicenseTemplate}">
+                            <TreeViewItem.ItemTemplate>
+                                <DataTemplate>
+                                    <TreeViewItem ItemsSource="{Binding Detail}" Header="{Binding}">
+                                        <TreeViewItem.HeaderTemplate>
+                                            <DataTemplate>
+                                                <streamlinectrls:SelectableControl>
+                                                    <Label Content="{Binding Name}" />
+                                                </streamlinectrls:SelectableControl>
+                                            </DataTemplate>
+                                        </TreeViewItem.HeaderTemplate>
+                                        <TreeViewItem.ItemTemplate>
+                                            <DataTemplate>
+                                                <streamlinectrls:SelectableControl Cursor="Hand" x:Name="expandedView" Command="{Binding SelectCommand}" >
+                                                    <DockPanel LastChildFill="True" DataContext="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},Path=DataContext}" ToolTip="{Binding Name}">
+                                                        <iconPacks:PackIconFontAwesome x:Name="checkIcon" DockPanel.Dock="Right" Kind="CheckCircleRegular" Margin="4,0"
+                                                                           Visibility="{Binding IsSelected,Converter={StaticResource boolVisibiltiyConverter}}"/>
+                                                        <RadioButton IsChecked="{Binding IsSelected}" GroupName="configGroup" Visibility="Collapsed" />
+                                                        <TextBlock x:Name="TextPart" VerticalAlignment="Center" Margin="8,0,0,0" Text="{Binding Name}" TextWrapping="NoWrap"/>
+                                                    </DockPanel>
+                                                </streamlinectrls:SelectableControl>
+                                            </DataTemplate>
+                                        </TreeViewItem.ItemTemplate>
+                                    </TreeViewItem>
+                                </DataTemplate>
+                            </TreeViewItem.ItemTemplate>
+                        </TreeViewItem>
+                        <ContentControl x:Name="collapseView" Height="44" Margin="1,8"
+                                        Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Controls:HamburgerMenu}}, Path=CompactPaneLength}"
+                                        HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
+                                        HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                        Content="{Binding Tag.IconSmall}"/>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Controls:HamburgerMenu}, Path=IsPaneOpen}" Value="true">
+                            <Setter TargetName="collapseView" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="expandedView" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Controls:HamburgerMenu}, Path=IsPaneOpen}" Value="false">
+                            <Setter TargetName="collapseView" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="expandedView" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Controls:HamburgerMenu.Resources>
+            <Controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
+                <DataTemplate>
+                    <Border>
+                        <TextBlock FontSize="16" Text="{x:Static strings:UIStrings.AdminModuleName}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </DataTemplate>
+            </Controls:HamburgerMenu.HamburgerMenuHeaderTemplate>
+            <Controls:HamburgerMenu.ItemTemplateSelector>
+                <local:HamburgerItemTemplateSelector />
+            </Controls:HamburgerMenu.ItemTemplateSelector>
+            <Controls:HamburgerMenu.ItemsSource>
+                <Controls:HamburgerMenuItemCollection>
+                    <Controls:HamburgerMenuGlyphItem Label="{x:Static strings:UIStrings.UserAccess}"  Tag="{Binding UserMapsViewModel}"/>
+                    <Controls:HamburgerMenuSeparatorItem />
+                    <Controls:HamburgerMenuGlyphItem Label="License"  Tag="{Binding LicenseItemsViewModel}"/>
+                </Controls:HamburgerMenuItemCollection>
+            </Controls:HamburgerMenu.ItemsSource>
+            <Controls:HamburgerMenu.Content>
+                <Border BorderThickness="1,0,0,1" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" >
+                    <ContentControl Content="{Binding SelectedItem}">
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type viewModel:UserMapViewModel}">
+                                <Grid>
+                                    <views:UserMapView />
+                                </Grid>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type lcviewModel:LicenseViewModel}">
+                                <Grid>
+                                    <lcviews:LicenseView />
+                                </Grid>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type lcviewModel:ActiveOnlineViewModel}">
+                                <Grid>
+                                    <lcviews:ActiveOnlineView />
+                                </Grid>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type lcviewModel:ActiveManualViewModel}">
+                                <Grid>
+                                    <lcviews:ActiveManualView />
+                                </Grid>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type lcviewModel:TelephonicActivationViewModel}">
+                                <Grid>
+                                    <lcviews:TelephonicActivationView />
+                                </Grid>
+                            </DataTemplate>
+                        </ContentControl.Resources>
+                    </ContentControl>
+                </Border>
+            </Controls:HamburgerMenu.Content>
+        </Controls:HamburgerMenu>
+    </Grid>
+</UserControl>
